@@ -17,7 +17,7 @@ struct CustomPickerView: View {
     @State var disabled = false
     
     var body: some View {
-        GeometryReader { _ in
+        GeometryReader { geo in
             VStack {
                 if !self.grid.isEmpty {
                     PickerViewTitle()
@@ -63,12 +63,12 @@ struct CustomPickerView: View {
                 
             }
             .frame(
-                width: UIScreen.screenWidth - 40,
-                height: UIScreen.screenHeight - 150,
-                alignment: .center
+                width: UIScreen.screenWidth / 1.12,
+                height: UIScreen.screenHeight / 1.4
             )
             .background(Color.customWhite)
             .cornerRadius(12)
+            .position(x: geo.size.width / 2, y: geo.size.height / 2)
         }
         .background(Color.customBlack.opacity(0.15).edgesIgnoringSafeArea(.all))
         .onTapGesture {
@@ -178,9 +178,11 @@ struct PickerViewTitle: View {
     var body: some View {
         HStack {
             Text("写真を選択")
-                .font(.custom(notosansRegular, size: UIScreen.screenWidth / 24))
+                .foregroundColor(Color.customWhite)
+                .font(.custom(notosansBold, size: UIScreen.screenWidth / 24))
             Spacer()
         }
-        .padding([.leading, .top])
+        .padding([.leading, .vertical])
+        .background(Color.customPrimary)
     }
 }

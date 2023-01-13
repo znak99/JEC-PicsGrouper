@@ -19,6 +19,7 @@ struct PageTitleView: View {
         HStack {
             Text(title)
                 .font(.custom(notosansBlack, size: UIScreen.screenWidth / 16))
+                .foregroundColor(Color.customBlack)
                 .padding()
             Spacer()
         }

@@ -23,7 +23,11 @@ struct HomeView: View {
 
     var body: some View {
         NavigationView {
-            
+            ZStack {
+                Color.customWhite.ignoresSafeArea()
+                
+            }
+            .toolbar(.hidden)
         }
     }
 }
