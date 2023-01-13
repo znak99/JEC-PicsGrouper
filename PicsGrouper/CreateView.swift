@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import Combine
+
+let maxCharacterLength = Int(10)
 
 struct CreateView: View {
     
     @State var selected: [UIImage] = []
     @State var show = false
     @State var showEmptyFieldWarnning = false
+    @State var showTitleWarnning = false
     
     @State var title = ""
     @State var year: Int = 2023
@@ -22,6 +26,11 @@ struct CreateView: View {
     @Environment(\.dismiss) private var dismiss
     
     @FetchRequest(
+        entity: PhotoGroup.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \PhotoGroup.date, ascending: true)])
+    var photoGroup: FetchedResults<PhotoGroup>
+    
+    @FetchRequest(
         entity: PhotoGroupDate.entity(),
         sortDescriptors: [NSSortDescriptor(keyPath: \PhotoGroupDate.date, ascending: false)])
     var photoGroupDate: FetchedResults<PhotoGroupDate>
@@ -30,15 +39,9 @@ struct CreateView: View {
         ZStack {
             Color.customWhite.ignoresSafeArea()
             VStack {
-                PageTitleView(title: "グループ作成")
+                PageTitle(title: "グループ作成")
                 Button(action: { dismiss() }) {
-                    HStack {
-                        Spacer()
-                        Text("ホームに戻る")
-                            .foregroundColor(Color.customRed)
-                            .font(.custom(notosansMedium, size: UIScreen.screenWidth / 32))
-                            .underline(true)
-                    }
+                    DismissButton()
                 }
                 .padding(.trailing)
                 
@@ -91,7 +94,12 @@ struct CreateView: View {
                                         .foregroundColor(Color.customBlack)
                                     Spacer()
                                 }
-                                TextField("8文字以内入力", text: $title)
+                                TextField("10文字以内入力", text: $title)
+                                    .onReceive(Just(title), perform: { _ in
+                                        if maxCharacterLength < title.count {
+                                            title = String(title.prefix(maxCharacterLength))
+                                        }
+                                    })
                                     .font(.custom(notosansMedium, size: UIScreen.screenWidth / 24))
                                     .foregroundColor(Color.customBlack)
                                     .padding(.horizontal)
@@ -159,7 +167,12 @@ struct CreateView: View {
                 .alert("グループ作成失敗", isPresented: $showEmptyFieldWarnning) {
                     Button("Ok") {}
                 } message: {
-                    Text("タイトルを入力してください")
+                    Text("タイトルを入力してください。")
+                }
+                .alert("グループ作成失敗", isPresented: $showTitleWarnning) {
+                    Button("Ok") {}
+                } message: {
+                    Text("もう存在するタイトルです。\n別のタイトルを入力してください。")
                 }
             if self.show {
                 CustomPickerView(selected: self.$selected, show: self.$show)
@@ -169,6 +182,14 @@ struct CreateView: View {
     }
     
     func saveGroup() {
+        
+        for group in photoGroup {
+            if group.title == self.title {
+                showTitleWarnning.toggle()
+                return
+            }
+        }
+        
         let dateContext = "\(self.year)年　\(self.month)月"
         withAnimation {
             
@@ -197,7 +218,7 @@ struct CreateView: View {
         print("--check")
         
         for date in photoGroupDate {
-            print(date.date)
+            print(date.date!)
         }
         
         print("--check end")

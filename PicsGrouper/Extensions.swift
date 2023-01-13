@@ -23,5 +23,5 @@ extension Color {
     static let customWhite = Color(red: 240/255, green: 240/255, blue: 240/255)
     static let customBlack = Color(red: 15/255, green: 15/255, blue: 15/255)
     static let customPrimary = Color(red: 135/255, green: 109/255, blue: 178/255)
-    static let customRed = Color(red: 194/255, green: 47/255, blue: 47/255)
+    static let customRed = Color(red: 240/255, green: 47/255, blue: 47/255)
 }

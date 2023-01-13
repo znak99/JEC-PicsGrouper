@@ -28,7 +28,14 @@ struct HomeView: View {
             ZStack {
                 Color.customWhite.ignoresSafeArea()
                 VStack {
-                    PageTitleView(title: "リスト")
+                    PageTitle(title: "リスト")
+                    HStack {
+                        Spacer()
+                        Text("\(photoGroup.count)個のグループ")
+                            .foregroundColor(Color.customBlack.opacity(0.5))
+                            .font(.custom(notosansLight, size: UIScreen.screenWidth / 28))
+                            .padding(.trailing)
+                    }
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
                             ForEach(photoGroupDate, id: \.self) { date in
@@ -43,7 +50,7 @@ struct HomeView: View {
                                         HStack {
                                             ForEach(photoGroup, id: \.self) { group in
                                                 if group.date == date.date {
-                                                    NavigationLink(destination: DetailView()) {
+                                                    NavigationLink(destination: DetailView(title: group.title ?? "", update: dateToStr(update: group.update), pics: dataToImage(pictures: group.pictures))) {
                                                         ZStack {
                                                             if group.pictures.count > 2 {
                                                                 Image(uiImage: UIImage(data: group.pictures[2])!)
@@ -87,10 +94,6 @@ struct HomeView: View {
                                                                 .background(Color.customPrimary)
                                                                 .cornerRadius(6)
                                                                 .offset(y: UIScreen.screenHeight / 22.5)
-                                                            Text(dateToStr(update: group.update))
-                                                                .font(.custom(notosansMedium, size: UIScreen.screenWidth / 48))
-                                                                .foregroundColor(Color.customBlack.opacity(0.5))
-                                                                .offset(x: 5, y: UIScreen.screenHeight / 22.5 + 25)
                                                         }
                                                         .padding()
                                                     }
@@ -137,6 +140,14 @@ struct HomeView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd作成"
         return formatter.string(from: update)
+    }
+    
+    func dataToImage(pictures: [Data]) -> [UIImage] {
+        var pics: [UIImage] = []
+        pictures.map { data in
+            pics.append(UIImage(data: data)!)
+        }
+        return pics
     }
 }
 

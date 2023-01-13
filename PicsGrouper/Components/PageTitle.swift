@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct PageTitleView: View {
+struct PageTitle: View {
     
     var title: String = ""
+    var color: Color = .customBlack
     
     init(title: String) {
         self.title = title
@@ -18,16 +19,16 @@ struct PageTitleView: View {
     var body: some View {
         HStack {
             Text(title)
-                .font(.custom(notosansBlack, size: UIScreen.screenWidth / 16))
-                .foregroundColor(Color.customBlack)
+                .font(.custom(notosansBlack, size: UIScreen.screenWidth / 14))
+                .foregroundColor(color)
                 .padding([.horizontal, .top])
             Spacer()
         }
     }
 }
 
-struct PageTitleView_Previews: PreviewProvider {
+struct PageTitle_Previews: PreviewProvider {
     static var previews: some View {
-        PageTitleView(title: "")
+        PageTitle(title: "")
     }
 }
