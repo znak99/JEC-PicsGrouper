@@ -19,7 +19,7 @@ extension PhotoGroup {
     @NSManaged public var title: String?
     @NSManaged public var update: Date?
     @NSManaged public var date: String?
-    @NSManaged public var pictures: [Data]?
+    @NSManaged public var pictures: [Data]
 
 }
 

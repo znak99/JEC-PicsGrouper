@@ -169,7 +169,7 @@ struct CreateView: View {
     }
     
     func saveGroup() {
-        let dateContext = "\(self.year)/\(self.month)"
+        let dateContext = "\(self.year)年　\(self.month)月"
         withAnimation {
             
             if !checkDate(dateContext: dateContext) {
@@ -194,6 +194,13 @@ struct CreateView: View {
             
             
         }
+        print("--check")
+        
+        for date in photoGroupDate {
+            print(date.date)
+        }
+        
+        print("--check end")
         dismiss()
     }
     

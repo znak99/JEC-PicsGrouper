@@ -32,17 +32,81 @@ struct HomeView: View {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
                             ForEach(photoGroupDate, id: \.self) { date in
-                                if date != nil {
-                                    VStack {
-                                        HStack {
-                                            Text(date.date ?? "")
-                                            Spacer()
-                                        }
+                                VStack {
+                                    HStack {
+                                        Text(date.date ?? "")
+                                            .foregroundColor(Color.customBlack)
+                                            .font(.custom(notosansBold, size: UIScreen.screenWidth / 24))
+                                        Spacer()
                                     }
-                                    .padding()
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack {
+                                            ForEach(photoGroup, id: \.self) { group in
+                                                if group.date == date.date {
+                                                    NavigationLink(destination: DetailView()) {
+                                                        ZStack {
+                                                            if group.pictures.count > 2 {
+                                                                Image(uiImage: UIImage(data: group.pictures[2])!)
+                                                                    .resizable()
+                                                                    .frame(width: UIScreen.screenWidth / 5, height: UIScreen.screenWidth / 5)
+                                                                    .shadow(color: Color.customPrimary, radius: 1)
+                                                                    .rotationEffect(.degrees(-16))
+                                                                Image(uiImage: UIImage(data: group.pictures[1])!)
+                                                                    .resizable()
+                                                                    .frame(width: UIScreen.screenWidth / 5, height: UIScreen.screenWidth / 5)
+                                                                    .shadow(color: Color.customPrimary, radius: 2)
+                                                                    .rotationEffect(.degrees(8))
+                                                                Image(uiImage: UIImage(data: group.pictures[0])!)
+                                                                    .resizable()
+                                                                    .frame(width: UIScreen.screenWidth / 5, height: UIScreen.screenWidth / 5)
+                                                                    .shadow(color: Color.customPrimary, radius: 3)
+                                                                    .rotationEffect(.degrees(-4))
+                                                            } else if group.pictures.count > 1 {
+                                                                Image(uiImage: UIImage(data: group.pictures[1])!)
+                                                                    .resizable()
+                                                                    .frame(width: UIScreen.screenWidth / 5, height: UIScreen.screenWidth / 5)
+                                                                    .shadow(color: Color.customPrimary, radius: 2)
+                                                                    .rotationEffect(.degrees(4))
+                                                                Image(uiImage: UIImage(data: group.pictures[0])!)
+                                                                    .resizable()
+                                                                    .frame(width: UIScreen.screenWidth / 5, height: UIScreen.screenWidth / 5)
+                                                                    .shadow(color: Color.customPrimary, radius: 3)
+                                                                    .rotationEffect(.degrees(-4))
+                                                            } else {
+                                                                Image(uiImage: UIImage(data: group.pictures[0])!)
+                                                                    .resizable()
+                                                                    .frame(width: UIScreen.screenWidth / 5, height: UIScreen.screenWidth / 5)
+                                                                    .shadow(color: Color.customPrimary, radius: 3)
+                                                                    .rotationEffect(.degrees(4))
+                                                            }
+                                                            Text(group.title ?? "")
+                                                                .font(.custom(notosansMedium, size: UIScreen.screenWidth / 32))
+                                                                .foregroundColor(.white)
+                                                                .padding(.vertical, UIScreen.screenWidth / 120)
+                                                                .padding(.horizontal, UIScreen.screenWidth / 30)
+                                                                .background(Color.customPrimary)
+                                                                .cornerRadius(6)
+                                                                .offset(y: UIScreen.screenHeight / 22.5)
+                                                            Text(dateToStr(update: group.update))
+                                                                .font(.custom(notosansMedium, size: UIScreen.screenWidth / 48))
+                                                                .foregroundColor(Color.customBlack.opacity(0.5))
+                                                                .offset(x: 5, y: UIScreen.screenHeight / 22.5 + 25)
+                                                        }
+                                                        .padding()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        .padding()
+                                    }
+                                    .background(.white)
+                                    .cornerRadius(15)
+                                    .shadow(color: Color.customBlack.opacity(0.2), radius: 5)
                                 }
+                                .padding()
                             }
                         }
+                        .padding(.bottom, UIScreen.screenHeight / 12)
                     }
                     Spacer()
                 }
@@ -66,6 +130,13 @@ struct HomeView: View {
             }
             .toolbar(.hidden)
         }
+    }
+    
+    func dateToStr(update: Date?) -> String {
+        guard let update = update else { return "Date Error" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd作成"
+        return formatter.string(from: update)
     }
 }
 
