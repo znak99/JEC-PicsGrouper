@@ -11,10 +11,15 @@ struct CreateView: View {
     
     @State var selected: [UIImage] = []
     @State var show = false
+    @State var showEmptyFieldWarnning = false
     
     @State var title = ""
     @State var year: Int
     @State var month: Int
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    @Environment(\.dismiss) private var dismiss
     
     init() {
         let date = Date()
@@ -22,9 +27,10 @@ struct CreateView: View {
         
         formatter.dateFormat = "yyyy-mm"
         let str: String = formatter.string(from: date)
+        let strToAry = str.split(separator: "-")
         
-        self.year = Int(str.split(separator: "-")[0]) ?? 2021
-        self.month = Int(str.split(separator: "-")[1]) ?? 6
+        _year = State(initialValue: Int(strToAry[0]) ?? 2021)
+        _month = State(initialValue: Int(strToAry[1]) ?? 6)
     }
     
     var body: some View {
@@ -120,7 +126,13 @@ struct CreateView: View {
                             }
                             .padding()
                             
-                            Button(action: {}) {
+                            Button(action: {
+                                if title.isEmpty {
+                                    self.showEmptyFieldWarnning.toggle()
+                                } else {
+                                    saveGroup()
+                                }
+                            }) {
                                 HStack {
                                     Spacer()
                                     Text("グループ作成")
@@ -139,10 +151,37 @@ struct CreateView: View {
                 }
                 Spacer()
             }
+                .alert("グループ作成失敗", isPresented: $showEmptyFieldWarnning) {
+                    Button("Ok") {}
+                } message: {
+                    Text("タイトルを入力してください")
+                }
             if self.show {
                 CustomPickerView(selected: self.$selected, show: self.$show)
             }
         }
+    }
+    
+    func saveGroup() {
+        withAnimation {
+            let dateGroup = PhotoGroupDate(context: viewContext)
+            dateGroup.date = "\(year)/\(month)"
+            let group = PhotoGroup(context: viewContext)
+            group.title = self.title
+            group.update = Date()
+            group.pictures = self.selected.map({ image in
+                image.pngData()!
+            })
+            group.date = "\(year)/\(month)"
+            
+            do {
+                try viewContext.save()
+            } catch {
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+        dismiss()
     }
 }
 
