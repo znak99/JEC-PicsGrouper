@@ -20,7 +20,7 @@ struct PageTitleView: View {
             Text(title)
                 .font(.custom(notosansBlack, size: UIScreen.screenWidth / 16))
                 .foregroundColor(Color.customBlack)
-                .padding()
+                .padding([.horizontal, .top])
             Spacer()
         }
     }

@@ -13,7 +13,7 @@ struct PicsGrouperApp: App {
 
     var body: some Scene {
         WindowGroup {
-            CreateView()
+            HomeView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

@@ -14,30 +14,33 @@ struct CreateView: View {
     @State var showEmptyFieldWarnning = false
     
     @State var title = ""
-    @State var year: Int
-    @State var month: Int
+    @State var year: Int = 2023
+    @State var month: Int = 1
     
     @Environment(\.managedObjectContext) private var viewContext
     
     @Environment(\.dismiss) private var dismiss
     
-    init() {
-        let date = Date()
-        let formatter = DateFormatter()
-        
-        formatter.dateFormat = "yyyy-mm"
-        let str: String = formatter.string(from: date)
-        let strToAry = str.split(separator: "-")
-        
-        _year = State(initialValue: Int(strToAry[0]) ?? 2021)
-        _month = State(initialValue: Int(strToAry[1]) ?? 6)
-    }
+    @FetchRequest(
+        entity: PhotoGroupDate.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \PhotoGroupDate.date, ascending: false)])
+    var photoGroupDate: FetchedResults<PhotoGroupDate>
     
     var body: some View {
         ZStack {
             Color.customWhite.ignoresSafeArea()
             VStack {
                 PageTitleView(title: "グループ作成")
+                Button(action: { dismiss() }) {
+                    HStack {
+                        Spacer()
+                        Text("ホームに戻る")
+                            .foregroundColor(Color.customRed)
+                            .font(.custom(notosansMedium, size: UIScreen.screenWidth / 32))
+                            .underline(true)
+                    }
+                }
+                .padding(.trailing)
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
@@ -108,7 +111,8 @@ struct CreateView: View {
                                 HStack {
                                     Picker("年度を選択", selection: $year) {
                                         ForEach(1990..<2040) { year in
-                                            Text("\(String(year))年").tag(year)
+                                            Text("\(String(year))年")
+                                                .tag(year)
                                                 .font(.custom(notosansMedium, size: UIScreen.screenWidth / 24))
                                                 .foregroundColor(Color.customBlack)
                                         }
@@ -116,7 +120,8 @@ struct CreateView: View {
                                     Spacer()
                                     Picker("月を選択", selection: $month) {
                                         ForEach(1..<13) { month in
-                                            Text("\(String(month))月").tag(month)
+                                            Text("\(String(month))月")
+                                                .tag(month)
                                                 .font(.custom(notosansMedium, size: UIScreen.screenWidth / 24))
                                                 .foregroundColor(Color.customBlack)
                                         }
@@ -124,7 +129,7 @@ struct CreateView: View {
                                     Spacer()
                                 }
                             }
-                            .padding()
+                            .padding([.horizontal, .top])
                             
                             Button(action: {
                                 if title.isEmpty {
@@ -160,19 +165,25 @@ struct CreateView: View {
                 CustomPickerView(selected: self.$selected, show: self.$show)
             }
         }
+        .toolbar(.hidden)
     }
     
     func saveGroup() {
+        let dateContext = "\(self.year)/\(self.month)"
         withAnimation {
-            let dateGroup = PhotoGroupDate(context: viewContext)
-            dateGroup.date = "\(year)/\(month)"
+            
+            if !checkDate(dateContext: dateContext) {
+                let groupDate = PhotoGroupDate(context: viewContext)
+                groupDate.date = dateContext
+            }
+            
             let group = PhotoGroup(context: viewContext)
             group.title = self.title
             group.update = Date()
             group.pictures = self.selected.map({ image in
                 image.pngData()!
             })
-            group.date = "\(year)/\(month)"
+            group.date = dateContext
             
             do {
                 try viewContext.save()
@@ -180,8 +191,21 @@ struct CreateView: View {
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
+            
+            
         }
         dismiss()
+    }
+    
+    func checkDate(dateContext: String) -> Bool {
+        
+        for i in photoGroupDate {
+            if i.date == dateContext {
+                return true
+            }
+        }
+        
+        return false
     }
 }
 
