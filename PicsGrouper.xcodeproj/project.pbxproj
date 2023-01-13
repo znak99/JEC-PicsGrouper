@@ -20,6 +20,7 @@
 		FB6A634D2970D909006CB671 /* NotoSansJP-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = FB6A63462970D82B006CB671 /* NotoSansJP-Medium.otf */; };
 		FB6A634E2970D90B006CB671 /* NotoSansJP-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = FB6A63482970D82B006CB671 /* NotoSansJP-Regular.otf */; };
 		FB6A63512970DCA0006CB671 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6A63502970DCA0006CB671 /* PageTitleView.swift */; };
+		FB6A63532970E63B006CB671 /* CustomPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6A63522970E63B006CB671 /* CustomPickerView.swift */; };
 		FBF8F02429706F520059C551 /* PicsGrouperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF8F02329706F520059C551 /* PicsGrouperApp.swift */; };
 		FBF8F02629706F520059C551 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF8F02529706F520059C551 /* HomeView.swift */; };
 		FBF8F02829706F520059C551 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBF8F02729706F520059C551 /* Assets.xcassets */; };
@@ -43,6 +44,7 @@
 		FB6A63482970D82B006CB671 /* NotoSansJP-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Regular.otf"; sourceTree = "<group>"; };
 		FB6A63492970D82B006CB671 /* NotoSansJP-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Bold.otf"; sourceTree = "<group>"; };
 		FB6A63502970DCA0006CB671 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
+		FB6A63522970E63B006CB671 /* CustomPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerView.swift; sourceTree = "<group>"; };
 		FBF8F02029706F520059C551 /* PicsGrouper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PicsGrouper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBF8F02329706F520059C551 /* PicsGrouperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicsGrouperApp.swift; sourceTree = "<group>"; };
 		FBF8F02529706F520059C551 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				FBF8F02529706F520059C551 /* HomeView.swift */,
 				FB6A63412970D52A006CB671 /* DetailView.swift */,
 				FB6A633F2970D51D006CB671 /* CreateView.swift */,
+				FB6A63522970E63B006CB671 /* CustomPickerView.swift */,
 				FB6A633D2970D505006CB671 /* Extensions.swift */,
 				FBF8F02729706F520059C551 /* Assets.xcassets */,
 				FBF8F02C29706F520059C551 /* Persistence.swift */,
@@ -213,6 +216,7 @@
 				FB6A63402970D51D006CB671 /* CreateView.swift in Sources */,
 				FB6A63422970D52A006CB671 /* DetailView.swift in Sources */,
 				FB01204829707A6400A6B338 /* PhotoGroupDate+CoreDataProperties.swift in Sources */,
+				FB6A63532970E63B006CB671 /* CustomPickerView.swift in Sources */,
 				FBF8F02629706F520059C551 /* HomeView.swift in Sources */,
 				FB01204929707A6400A6B338 /* PhotoGroup+CoreDataClass.swift in Sources */,
 				FBF8F02429706F520059C551 /* PicsGrouperApp.swift in Sources */,
@@ -348,6 +352,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PicsGrouper/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(MARKETING_VERSION)";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -377,6 +382,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PicsGrouper/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(MARKETING_VERSION)";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
