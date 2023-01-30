@@ -7,13 +7,14 @@
 
 import SwiftUI
 import Combine
+import PhotosUI
 
 let maxCharacterLength = Int(10)
 
 struct CreateView: View {
     
     @State var selected: [UIImage] = []
-    @State var show = false
+    @State var showPicker = false
     @State var showEmptyFieldWarnning = false
     @State var showTitleWarnning = false
     
@@ -64,7 +65,7 @@ struct CreateView: View {
                         
                         Button(action: {
                             self.selected.removeAll()
-                            self.show.toggle()
+                            self.showPicker.toggle()
                         }) {
                             HStack(spacing: 0) {
                                 Text(self.selected.isEmpty ? "写真追加 " : "写真編集")
@@ -174,11 +175,11 @@ struct CreateView: View {
                 } message: {
                     Text("もう存在するタイトルです。\n別のタイトルを入力してください。")
                 }
-            if self.show {
-                CustomPickerView(selected: self.$selected, show: self.$show)
-            }
         }
         .toolbar(.hidden)
+        .sheet(isPresented: $showPicker) {
+            ImagePicker(images: $selected, showPicker: $showPicker)
+        }
     }
     
     func saveGroup() {
@@ -240,5 +241,55 @@ struct CreateView: View {
 struct CreateView_Previews: PreviewProvider {
     static var previews: some View {
         CreateView()
+    }
+}
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var images: [UIImage]
+    @Binding var showPicker: Bool
+    
+    func makeCoordinator() -> Coordinator {
+        return ImagePicker.Coordinator(parent1: self)
+    }
+    
+    func makeUIViewController(context: Context) -> PHPickerViewController {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 0
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = context.coordinator
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {
+        
+    }
+    
+    class Coordinator: NSObject, PHPickerViewControllerDelegate {
+        var parent: ImagePicker
+        
+        init(parent1: ImagePicker) {
+            parent = parent1
+        }
+        
+        
+        
+        func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            parent.showPicker.toggle()
+            for img in results {
+                if img.itemProvider.canLoadObject(ofClass: UIImage.self) {
+                    img.itemProvider.loadObject(ofClass: UIImage.self) { img, error in
+                        guard let image1 = img else {
+                            print(error)
+                            return
+                        }
+                        
+                        self.parent.images.append(image1 as! UIImage)
+                    }
+                } else {
+                    print("Can't be loaded")
+                }
+            }
+        }
     }
 }

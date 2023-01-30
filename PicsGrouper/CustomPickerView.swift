@@ -32,9 +32,6 @@ struct CustomPickerView: View {
                                             }
                                         }
                                     }
-//                                    if self.data.count % 3 != 0 && i == self.grid.last! {
-//                                        Spacer()
-//                                    }
                                 }
                                 .padding(.leading, (self.data.count % 3 != 0 && i == self.grid.last!) ? 15 : 0)
                             }
@@ -113,12 +110,6 @@ struct CustomPickerView: View {
         }
     }
 }
-
-//struct CustomPickerView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CustomPickerView()
-//    }
-//}
 
 struct Images {
     var image: UIImage
